@@ -193,9 +193,9 @@ __gimme() {
 			ln -sf "$GIMME_DIR/gimme.sh" "$HOME/bin/gimme"
 		else
 			echo "Updating gimme ..."
-			pushd "$GIMME_DIR"
+			pushd "$GIMME_DIR" >/dev/null
 			git pull
-			popd
+			popd >/dev/null
 		fi
 		return 0
 	;;
