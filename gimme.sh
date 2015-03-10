@@ -197,7 +197,6 @@ __gimme() {
 			git pull
 			popd >/dev/null
 		fi
-		return 0
 	;;
 	*)
 		_gimme pkgtool
@@ -205,7 +204,7 @@ __gimme() {
 		has "$PKG"  ||  _gimmepkg "$PKG"
 	;;
 	esac
-	echo "Got $PKG"
+	echo "# DONE: gimme $PKG"
 }
 
 _gimme() {
