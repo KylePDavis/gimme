@@ -254,7 +254,7 @@ _gimme_complete() {
 }
 complete -F _gimme_complete gimme
 
-if [[ "$0" = "bash" ]]; then
+if [[ "$BASH_SOURCE" && "$0" = "bash" ]]; then
 	set +e
 elif ! [[ "$0" ]]; then
 	gimme gimme
