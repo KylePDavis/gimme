@@ -1,13 +1,13 @@
 #!/bin/bash
 # a quick and dirty meta pkg installer
+#
+#TODO: output help if used wrong
+#
 ###############################################################################
 set -e
 
-#TODO: output help if used wrong
-#TODO: provide completion
-#TODO: bubble up errors from pkgs
-GIMME_URL="http://git.kylepdavis.com/kylepdavis/gimme.git"
-GIMME_DIR="$HOME/.gimme"
+[ "$GIMME_URL" ]  ||  GIMME_URL="http://git.kylepdavis.com/kylepdavis/gimme.git"
+[ "$GIMME_DIR" ]  ||  GIMME_DIR="$HOME/.gimme"
 
 alias getme=gimme
 alias giveme=gimme
