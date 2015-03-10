@@ -182,17 +182,20 @@ __gimme() {
 	pkgtool_metadata)
 		pkgtool update
 	;;
-	gimme) _gimme git
+	gimme)
 		if [[ "$BASH_SOURCE" ]]; then
 			echo "TODO: make this update gimme"
 		else
-			echo "Installing 'gimme' to \$HOME/bin/"
+			echo "Checking gimme ..."
+			_gimme git
 			if ! [[ -d "$GIMME_DIR" ]]; then
+				echo "Installing $HOME/bin/gimme ..."
 				mkdir -p "$GIMME_DIR"
 				git clone "$GIMME_URL" "$GIMME_DIR"
 				mkdir -p "$HOME/bin"
-				ln -sfv "$GIMME_DIR/gimme.sh" "$HOME/bin/gimme"
+				ln -sf "$GIMME_DIR/gimme.sh" "$HOME/bin/gimme"
 			else
+				echo "Updating gimme ..."
 				pushd "$GIMME_DIR"
 				git pull
 				popd
