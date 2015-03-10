@@ -248,16 +248,17 @@ gimme() {
 	_gimme "$@"
 }
 
-GIMME_GIMMES=$(type __gimme | grep ')$' | tr -d ')|*')
-_gimme_complete() {
-	COMPREPLY=( $(compgen -W "$GIMME_GIMMES" -- "${COMP_WORDS[COMP_CWORD]}") )
-}
-complete -F _gimme_complete gimme
-
-if [[ "$BASH_SOURCE" && "$0" = "bash" ]]; then
-	set +e
-elif ! [[ "$0" ]]; then
-	gimme gimme
+if [[ "$0" = "bash" ]]; then
+	if [[ "$BASH_SOURCE" ]]; then
+		set +e
+		GIMME_GIMMES=$(type __gimme | grep ')$' | tr -d ')|*')
+		_gimme_complete() {
+			COMPREPLY=( $(compgen -W "$GIMME_GIMMES" -- "${COMP_WORDS[COMP_CWORD]}") )
+		}
+		complete -F _gimme_complete gimme
+	else
+		gimme gimme
+	fi
 else
 	gimme "$@"
 fi
