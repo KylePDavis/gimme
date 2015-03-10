@@ -8,9 +8,7 @@ set -e
 
 [ "$GIMME_URL" ]  ||  GIMME_URL="http://git.kylepdavis.com/kylepdavis/gimme.git"
 [ "$GIMME_DIR" ]  ||  GIMME_DIR="$HOME/.gimme"
-
-alias getme=gimme
-alias giveme=gimme
+[ "$GIMMES" ]  ||  GIMMES=""
 
 has() {
 	which "$1" >/dev/null
@@ -24,40 +22,42 @@ pkgtool() {
 	fi
 }
 
-_gimmepkg() {
+gimme_pkg() {
 	pkgtool install "$@"
 }
 
-_GIMMES=
-
 __gimme() {
 	local PKG="$1"
+
 	! [[ "$_GIMMES" == *" $PKG "* ]]  ||  return 0
 	_GIMMES+=" $PKG "
+
 	case "$PKG" in
+
 	dotfiles)
-		#TODO: get and install these
-		#TODO: difficulty: should be able to setup dotfiles + bash + base tools all in one command ;-)
-		#TODO: protip:   curl -sLo- $URL  |  bash    # ftw
-		echo ... //TODO: $PKG ...
+		#TODO: install my dotfiles
 	;;
+
 	gcc)
 		if [[ "$OS" = "Darwin" ]]; then
 			"xcode-select" --install 2>&1 | grep -q "already installed"
 		else
-			_gimmepkg build-essential
+			has gcc  ||  gimme_pkg build-essential
 			_gimme curl
 		fi
 	;;
+
 	bash_profile) _gimme liquidprompt
 		[[ -f "$HOME/.bash_profile" ]]  ||  ln -sv "$HOME/.profile" "$HOME/.bash_profile"
 		[[ -f "$HOME/.bashrc" ]]        ||  ln -sv "$HOME/.profile" "$HOME/.bashrc"
 	;;
+
 	liquidprompt) _gimme bash_profile git
-		[[ -d "$HOME/liquidprompt" ]]  ||  git clone "https://github.com/nojhan/liquidprompt.git" "$HOME/liquidprompt"
+		[[ -d "$HOME/.liquidprompt" ]]  ||  git clone "https://github.com/nojhan/liquidprompt.git" "$HOME/.liquidprompt"
 	;;
+
 	git)
-		has git  ||  _gimmepkg git
+		has git  ||  gimme_pkg git
 		if ! [[ -f "$HOME/.gitconfig" ]]; then
 			git config --global color.ui true
 			if [[ "$OS" = "Darwin" ]]; then
@@ -67,6 +67,7 @@ __gimme() {
 			fi
 		fi
 	;;
+
 	git-extras) _gimme git
 		has git-alias  ||  (cd /tmp && git clone --depth 1 https://github.com/tj/git-extras.git && cd git-extras && sudo make install)
 		if ! [[ "$(git alias)" ]]; then
@@ -77,12 +78,14 @@ __gimme() {
 			git alias st status
 		fi
 	;;
+
 	python)
 		if [[ "$OS" = "Darwin" ]]; then
 			mkdir -p "$PYTHONPATH"
 		fi
-		has python  ||  _gimmepkg python
+		has python  ||  gimme_pkg python
 	;;
+
 	pylint|pep8) _gimme python
 		if ! has "$PKG"; then
 			if [[ "$OS" = "Darwin" ]]; then
@@ -93,13 +96,15 @@ __gimme() {
 			fi
 		fi
 	;;
+
 	node)
 		if [[ "$OS" = "Darwin" ]]; then
-			has node  ||  _gimmepkg node
+			has node  ||  gimme_pkg node
 		else #TODO: might get old version here ...
 			_gimme nodejs npm
 		fi
 	;;
+
 	jshint|js-beautify|json)
 		if [[ "$OS" = "Darwin" ]]; then
 			has "$PKG"  ||  npm install -g "$PKG"
@@ -107,32 +112,37 @@ __gimme() {
 			has "$PKG"  ||  sudo npm install -g "$PKG"
 		fi
 	;;
+
 	mongodb)
-		has "mongod"  ||  _gimmepkg mongodb
+		has "mongod"  ||  gimme_pkg mongodb
 	;;
+
 	redis)
 		if ! has "redis-server"; then
 			if [[ "$OS" = "Darwin" ]]; then
-				_gimmepkg redis
+				gimme_pkg redis
 			else
-				_gimmepkg redis-server
+				gimme_pkg redis-server
 			fi
 		fi
 	;;
+
 	go)
 		_gimme curl
 		#TODO: setup go vs golang dirs?
 		if ! which "$PKG" >/dev/null; then
 			if [[ "$OS" = "Darwin" ]]; then
-				_gimmepkg go --cross-compile-common
+				gimme_pkg go --cross-compile-common
 			else
-				_gimmepkg golang
+				gimme_pkg golang
 			fi
 		fi
 	;;
+
 	difftool)
 		_gimme colordiff
 	;;
+
 	mergetool)
 		if [[ "$OS" = "Darwin" ]]; then
 			true #TODO: usually use opendiff but SourceTree installer would be nice
@@ -140,38 +150,49 @@ __gimme() {
 			_gimme meld
 		fi
 	;;
+
 	tools)
 		_gimme bash_profile liquidprompt git tmux tree vim
 	;;
-	dev+generic)
+
+	dev/generic)
 		_gimme gcc mergetool
 	;;
-	dev+js)
+
+	dev/js)
 		_gimme node jshint js-beautify json
 	;;
-	dev+sh)
+
+	dev/sh)
 		_gimme shellcheck
 	;;
-	dev+py)
+
+	dev/py)
 		_gimme python pylint pep8
 	;;
-	dev+db)
+
+	dev/db)
 		_gimme mongodb redis postgresql
 	;;
-	dev+go)
+
+	dev/go)
 		_gimme go
 	;;
+
 	dev)
-		_gimme dev+generic dev+js dev+sh dev+py dev+db dev+go
+		_gimme dev/generic dev+js dev+sh dev+py dev+db dev+go
 	;;
+
 	stuff)
 		_gimme tools dev
 	;;
+
 	homebrew) _gimme gcc git
 		[[ -d "$HOME/homebrew" ]]   ||  (mkdir "$HOME/homebrew" 2>/dev/null  &&  curl -L "https://github.com/Homebrew/homebrew/tarball/master" | tar xz --strip 1 -C "$HOME/homebrew"  &&  brew update)
 		[[ "$BREW_PREFIX" ]]  ||  BREW_PREFIX=$(brew --prefix)
 		has brew-cask  ||  brew install caskroom/cask/brew-cask
 	;;
+
 	pkgtool)
 		if [[ "$OS" = "Darwin" ]]; then
 			_gimme homebrew
@@ -179,9 +200,11 @@ __gimme() {
 			has apt-get  ||  return 123
 		fi
 	;;
+
 	pkgtool_metadata)
 		pkgtool update
 	;;
+
 	gimme)
 		echo "Checking gimme ..."
 		_gimme git
@@ -198,12 +221,15 @@ __gimme() {
 			popd >/dev/null
 		fi
 	;;
+
 	*)
 		_gimme pkgtool
 		#TODO: _gimme pkgtool_metadata
-		has "$PKG"  ||  _gimmepkg "$PKG"
+		has "$PKG"  ||  gimme_pkg "$PKG"
 	;;
+
 	esac
+
 	echo "# DONE: gimme $PKG"
 }
 
@@ -219,9 +245,7 @@ _gimme() {
 
 gimme() {
 	_GIMMES=
-	#set -x
 	_gimme "$@"
-	#set +x
 }
 
 GIMME_GIMMES=$(type __gimme | grep ')$' | tr -d ')|*')
@@ -230,9 +254,10 @@ _gimme_complete() {
 }
 complete -F _gimme_complete gimme
 
-if [[ ! "$BASH_SOURCE" && "$#" = 0 ]]; then
+if [[ "$0" = "bash" ]]; then
+	set +e
+elif ! [[ "$0" ]]; then
 	gimme gimme
-	exit 0
+else
+	gimme "$@"
 fi
-
-gimme "$@"
