@@ -7,6 +7,7 @@ set -e
 #TODO: provide completion
 #TODO: bubble up errors from pkgs
 GIMME_URL="http://git.kylepdavis.com/kylepdavis/gimme.git"
+GIMME_DIR="$HOME/.gimme"
 
 alias getme=gimme
 alias giveme=gimme
@@ -186,7 +187,6 @@ __gimme() {
 			echo "TODO: make this update gimme"
 		else
 			echo "Installing 'gimme' to \$HOME/bin/"
-			GIMME_DIR="$HOME/.gimme"
 			if ! [[ -d "$GIMME_DIR" ]]; then
 				mkdir -p "$GIMME_DIR"
 				git clone "$GIMME_URL" "$GIMME_DIR"
