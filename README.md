@@ -1,5 +1,5 @@
 # gimme
-A micro meta manager for the masses.
+A meta micro manager for the masses.
 
 
 ## What. Does. _That_. MEAN?
