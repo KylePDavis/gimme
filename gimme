@@ -11,7 +11,7 @@
 [ "$GIMME_LINK_DIR" ]    ||  export GIMME_LINK_DIR=$(dirname "$GIMME_LINK")
 [ "$GIMMES" ]            ||  export GIMMES=""
 [ "$OS" ]                ||  export OS=$(uname -s)
-[ "$DEBUG" ]             ||  export DEBUG=0
+[ "$DEBUG" ]             ||  export DEBUG=
 
 has() { which "$1" >/dev/null; }
 
