@@ -16,7 +16,7 @@ yeah...
 
 ## Installation
 ```bash
-curl -fsSL "http://git.kylepdavis.com/kylepdavis/gimme/raw/master/gimme" | bash -
+curl -fsSL "https://github.com/KylePDavis/gimme/raw/master/gimme" | bash -
 ```
 _(you do read these scripts, right?)_
 
