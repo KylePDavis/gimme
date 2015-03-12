@@ -1,10 +1,10 @@
 #!/bin/bash
-# A micro meta package manager for the masses.
+# A meta micro manager for the masses.
 # USAGE:
 #     gimme [stuff]
 ###############################################################################
 
-[ "$GIMME_URL" ]         ||  export GIMME_URL="http://git.kylepdavis.com/kylepdavis/gimme"
+[ "$GIMME_URL" ]         ||  export GIMME_URL="https://github.com/KylePDavis/gimme"
 [ "$GIMME_DIR" ]         ||  export GIMME_DIR="$HOME/.gimme"
 [ "$GIMME_GIMMES_DIR" ]  ||  export GIMME_GIMMES_DIR="$GIMME_DIR/gimmes"
 [ "$GIMME_LINK" ]        ||  export GIMME_LINK="$HOME/bin/gimme"
