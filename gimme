@@ -29,8 +29,7 @@ gimme_pkg() {
 
 export -f has pkgtool gimme_pkg
 
-
-if [[ "$0" = "bash" ]]; then # sourced or piped
+if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 
 	if [[ "$BASH_SOURCE" ]]; then # sourced
 
@@ -38,7 +37,7 @@ if [[ "$0" = "bash" ]]; then # sourced or piped
 			if [[ "$2" = -* ]]; then
 				COMPREPLY=( $(compgen -W "--help --version" -- "$2") )
 			else
-				COMPREPLY=( $(find "$GIMME_GIMMES_DIR" -type f -path "$GIMME_GIMMES_DIR/$2*" \! -name '.*' -printf "%P\n") )
+				COMPREPLY=( $(find "$GIMME_GIMMES_DIR" -type f -path "$GIMME_GIMMES_DIR/$2*" \! -name '.*' | cut -c$(( ${#GIMME_GIMMES_DIR} + 2))- ) )
 			fi
 		}
 
