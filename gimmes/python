@@ -1,0 +1,6 @@
+#!/bin/bash
+if [[ "$OS" = "Darwin" ]]; then
+	mkdir -p "$PYTHONPATH"
+fi
+has python  ||  gimme_pkg python
+has easy_install || gimme_pkg python-setuptools

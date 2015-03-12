@@ -1,0 +1,13 @@
+#!/bin/bash
+REPO_URL="https://github.com/KylePDavis/dotfiles"
+REPO_DIR="$HOME/.dotfiles"
+
+if ! [[ -d "$REPO_DIR" ]]; then
+
+	git clone "$REPO_URL" "$REPO_DIR"
+
+	if [[ -x "$REPO_DIR/install.sh" ]]; then
+		"$REPO_DIR/install.sh"
+	fi
+
+fi

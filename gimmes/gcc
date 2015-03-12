@@ -1,0 +1,6 @@
+#!/bin/bash
+if [[ "$OS" = "Darwin" ]]; then
+	"xcode-select" --install 2>&1 | grep -q "already installed"
+else
+	has gcc  ||  gimme_pkg build-essential
+fi

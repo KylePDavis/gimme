@@ -1,18 +1,19 @@
 #!/bin/bash
-# a quick and dirty meta pkg installer
-#
-#TODO: output help if used wrong
-#
+# A micro meta package manager for the masses.
+# USAGE:
+#     gimme [stuff]
 ###############################################################################
-set -e
 
-[ "$GIMME_URL" ]  ||  GIMME_URL="http://git.kylepdavis.com/kylepdavis/gimme.git"
-[ "$GIMME_DIR" ]  ||  GIMME_DIR="$HOME/.gimme"
-[ "$GIMMES" ]  ||  GIMMES=""
+[ "$GIMME_URL" ]         ||  export GIMME_URL="http://git.kylepdavis.com/kylepdavis/gimme"
+[ "$GIMME_DIR" ]         ||  export GIMME_DIR="$HOME/.gimme"
+[ "$GIMME_GIMMES_DIR" ]  ||  export GIMME_GIMMES_DIR="$GIMME_DIR/gimmes"
+[ "$GIMME_LINK" ]        ||  export GIMME_LINK="$HOME/bin/gimme"
+[ "$GIMME_LINK_DIR" ]    ||  export GIMME_LINK_DIR=$(dirname "$GIMME_LINK")
+[ "$GIMMES" ]            ||  export GIMMES=""
+[ "$OS" ]                ||  export OS=$(uname -s)
+[ "$DEBUG" ]             ||  export DEBUG=0
 
-has() {
-	which "$1" >/dev/null
-}
+has() { which "$1" >/dev/null; }
 
 pkgtool() {
 	if [[ "$OS" = "Darwin" ]]; then
@@ -26,239 +27,83 @@ gimme_pkg() {
 	pkgtool install "$@"
 }
 
-__gimme() {
-	local PKG="$1"
+export -f has pkgtool gimme_pkg
 
-	! [[ "$_GIMMES" == *" $PKG "* ]]  ||  return 0
-	_GIMMES+=" $PKG "
 
-	case "$PKG" in
+if [[ "$0" = "bash" ]]; then # sourced or piped
 
-	dotfiles)
-		#TODO: install my dotfiles
-	;;
+	if [[ "$BASH_SOURCE" ]]; then # sourced
 
-	gcc)
-		if [[ "$OS" = "Darwin" ]]; then
-			"xcode-select" --install 2>&1 | grep -q "already installed"
-		else
-			has gcc  ||  gimme_pkg build-essential
-			_gimme curl
-		fi
-	;;
-
-	bash_profile) _gimme liquidprompt
-		[[ -f "$HOME/.bash_profile" ]]  ||  ln -sv "$HOME/.profile" "$HOME/.bash_profile"
-		[[ -f "$HOME/.bashrc" ]]        ||  ln -sv "$HOME/.profile" "$HOME/.bashrc"
-	;;
-
-	liquidprompt) _gimme bash_profile git
-		[[ -d "$HOME/.liquidprompt" ]]  ||  git clone "https://github.com/nojhan/liquidprompt.git" "$HOME/.liquidprompt"
-	;;
-
-	git)
-		has git  ||  gimme_pkg git
-		if ! [[ -f "$HOME/.gitconfig" ]]; then
-			git config --global color.ui true
-			if [[ "$OS" = "Darwin" ]]; then
-				git config --global credential.helper "osxkeychain"
+		_gimme_completely() {
+			if [[ "$2" = -* ]]; then
+				COMPREPLY=( $(compgen -W "--help --version" -- "$2") )
 			else
-				git config --global credential.helper "cache --timeout=3600"
+				COMPREPLY=( $(find "$GIMME_GIMMES_DIR" -type f -path "$GIMME_GIMMES_DIR/$2*" \! -name '.*' -printf "%P\n") )
 			fi
-		fi
-	;;
+		}
 
-	git-extras) _gimme git
-		has git-alias  ||  (cd /tmp && git clone --depth 1 https://github.com/tj/git-extras.git && cd git-extras && sudo make install)
-		if ! [[ "$(git alias)" ]]; then
-			git alias br branch
-			git alias ci commit
-			git alias co checkout
-			git alias di diff
-			git alias st status
-		fi
-	;;
+		complete -F _gimme_completely gimme
 
-	python)
-		if [[ "$OS" = "Darwin" ]]; then
-			mkdir -p "$PYTHONPATH"
-		fi
-		has python  ||  gimme_pkg python
-	;;
+	else # piped
 
-	pylint|pep8) _gimme python
-		if ! has "$PKG"; then
-			if [[ "$OS" = "Darwin" ]]; then
-				easy_install -d "$PYTHONPATH" "$PKG"
-				ln -sv "$PYTHONPATH/$PKG" "$(brew --prefix)/bin/$PKG"
-			else
-				easy_install "$PKG"
-			fi
-		fi
-	;;
-
-	node)
-		if [[ "$OS" = "Darwin" ]]; then
-			has node  ||  gimme_pkg node
-		else #TODO: might get old version here ...
-			_gimme nodejs npm
-		fi
-	;;
-
-	jshint|js-beautify|json)
-		if [[ "$OS" = "Darwin" ]]; then
-			has "$PKG"  ||  npm install -g "$PKG"
-		else
-			has "$PKG"  ||  sudo npm install -g "$PKG"
-		fi
-	;;
-
-	mongodb)
-		has "mongod"  ||  gimme_pkg mongodb
-	;;
-
-	redis)
-		if ! has "redis-server"; then
-			if [[ "$OS" = "Darwin" ]]; then
-				gimme_pkg redis
-			else
-				gimme_pkg redis-server
-			fi
-		fi
-	;;
-
-	go)
-		_gimme curl
-		#TODO: setup go vs golang dirs?
-		if ! which "$PKG" >/dev/null; then
-			if [[ "$OS" = "Darwin" ]]; then
-				gimme_pkg go --cross-compile-common
-			else
-				gimme_pkg golang
-			fi
-		fi
-	;;
-
-	difftool)
-		_gimme colordiff
-	;;
-
-	mergetool)
-		if [[ "$OS" = "Darwin" ]]; then
-			true #TODO: usually use opendiff but SourceTree installer would be nice
-		else
-			_gimme meld
-		fi
-	;;
-
-	tools)
-		_gimme bash_profile liquidprompt git tmux tree vim
-	;;
-
-	dev/generic)
-		_gimme gcc mergetool
-	;;
-
-	dev/js)
-		_gimme node jshint js-beautify json
-	;;
-
-	dev/sh)
-		_gimme shellcheck
-	;;
-
-	dev/py)
-		_gimme python pylint pep8
-	;;
-
-	dev/db)
-		_gimme mongodb redis postgresql
-	;;
-
-	dev/go)
-		_gimme go
-	;;
-
-	dev)
-		_gimme dev/generic dev+js dev+sh dev+py dev+db dev+go
-	;;
-
-	stuff)
-		_gimme tools dev
-	;;
-
-	homebrew) _gimme gcc git
-		[[ -d "$HOME/homebrew" ]]   ||  (mkdir "$HOME/homebrew" 2>/dev/null  &&  curl -L "https://github.com/Homebrew/homebrew/tarball/master" | tar xz --strip 1 -C "$HOME/homebrew"  &&  brew update)
-		[[ "$BREW_PREFIX" ]]  ||  BREW_PREFIX=$(brew --prefix)
-		has brew-cask  ||  brew install caskroom/cask/brew-cask
-	;;
-
-	pkgtool)
-		if [[ "$OS" = "Darwin" ]]; then
-			_gimme homebrew
-		else
-			has apt-get  ||  return 123
-		fi
-	;;
-
-	pkgtool_metadata)
-		pkgtool update
-	;;
-
-	gimme)
-		echo "Checking gimme ..."
-		_gimme git
 		if ! [[ -d "$GIMME_DIR" ]]; then
-			echo "Installing $HOME/bin/gimme ..."
+
+			echo "Installing $GIMME_DIR/gimme ..."
 			mkdir -p "$GIMME_DIR"
 			git clone "$GIMME_URL" "$GIMME_DIR"
-			mkdir -p "$HOME/bin"
-			ln -sf "$GIMME_DIR/gimme.sh" "$HOME/bin/gimme"
+			mkdir -p "$(dirname "$GIMME_LINK")"
+			ln -sf "$GIMME_DIR/gimme" "$GIMME_LINK"
+			echo "Done! Now you can 'gimme stuff' or 'gimme dev/stuff' or even 'gimme gimme'!"
+
 		else
-			echo "Updating gimme ..."
-			pushd "$GIMME_DIR" >/dev/null
+
+			echo "Updating gimme (in $GIMME_DIR) ..."
+			cd "$GIMME_DIR"
 			git pull
-			popd >/dev/null
+
 		fi
-	;;
 
-	*)
-		_gimme pkgtool
-		#TODO: _gimme pkgtool_metadata
-		has "$PKG"  ||  gimme_pkg "$PKG"
-	;;
-
-	esac
-
-	echo "# DONE: gimme $PKG"
-}
-
-_gimme() {
-	local PKG
-	for PKG in "$@"; do
-		if ! __gimme "$PKG"; then
-			echo "ERROR: Unable to fulfill gimme for $PKG!"
-			return 123
-		fi
-	done
-}
-
-gimme() {
-	_GIMMES=
-	_gimme "$@"
-}
-
-if [[ "$0" = "bash" ]]; then
-	if [[ "$BASH_SOURCE" ]]; then
-		set +e
-		GIMME_GIMMES=$(type __gimme | grep ')$' | tr -d ')|*')
-		_gimme_complete() {
-			COMPREPLY=( $(compgen -W "$GIMME_GIMMES" -- "${COMP_WORDS[COMP_CWORD]}") )
-		}
-		complete -F _gimme_complete gimme
-	else
-		gimme gimme
 	fi
-else
-	gimme "$@"
+
+else # normal usage
+	set -e
+	set -E
+	set -o pipefail
+
+	on_err() {
+		echo "ERROR: Unable to gimme \"$GIMME\" (EXIT=$?)" 1>&2
+	}
+	trap on_err ERR
+
+	for GIMME; do
+
+		! [[ "$GIMMES" == *" $GIMME "* ]]  ||  exit 0
+		export GIMMES+=" $GIMME " GIMME
+
+		P="$GIMME_GIMMES_DIR/$GIMME"
+
+		if ! [[ -f "$P" ]]; then
+			# find _default handler
+			while P=$(dirname "$P") && [[ "$P" = "$GIMME_GIMMES_DIR"* ]]; do
+				if [[ -f "$P/_default" ]]; then
+					P="$P/_default"
+					break;
+				fi
+			done
+			# no default
+			if ! [[ "$P" = "$GIMME_GIMMES_DIR"* ]]; then
+				echo "# ERROR: Unable to find $GIMME_GIMMES_DIR/_default handler" 1>&2
+				exit 1
+			fi
+		fi
+
+		if [[ -x "$P" ]]; then
+			[[ "$PATH" = "$LINK_DIR"* ]]  ||  export PATH="$LINK_DIR:$PATH"
+			"$P"
+			echo "# DONE: gimme $GIMME"
+		else
+			echo "# WARN: gimme $GIMME was SKIPPED because $P is not marked executable!"
+		fi
+
+	done
 fi

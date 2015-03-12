@@ -1,0 +1,11 @@
+#!/bin/bash
+gimme gcc git
+if ! has node; then
+	if [[ "$OS" = "Darwin" ]]; then
+		gimme_pkg node
+	else
+		gimme_pkg nodejs npm libgnome-keyring-dev fakeroot
+		sudo npm config set python /usr/bin/python2 -g
+		sudo update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
+	fi
+fi

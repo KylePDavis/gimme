@@ -1,0 +1,13 @@
+#!/bin/bash
+
+gimme git
+
+has git-alias  ||  gimme_pkg git-extras
+
+if ! [[ "$(git alias)" ]]; then
+	git alias br branch
+	git alias ci commit
+	git alias co checkout
+	git alias di diff
+	git alias st status
+fi

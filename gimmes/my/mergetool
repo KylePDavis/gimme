@@ -1,0 +1,6 @@
+#!/bin/bash
+if [[ "$OS" = "Darwin" ]]; then
+	[[ -d "$HOME/Applications/SourceTree.app" ]]  ||  brew cask install sourcetree
+else
+	has meld  ||  gimme meld
+fi

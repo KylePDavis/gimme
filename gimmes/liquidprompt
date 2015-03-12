@@ -1,0 +1,7 @@
+#!/bin/bash
+
+gimme git
+
+REPO_URL="https://github.com/nojhan/liquidprompt"
+REPO_DIR="$HOME/.liquidprompt"
+[[ -d "$REPO_DIR" ]]  ||  git clone "$REPO_URL" "$REPO_DIR"

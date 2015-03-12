@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# tools
+gimme \
+	my/dotfiles \
+	liquidprompt \
+	git \
+	tmux \
+	tree \
+	vim \

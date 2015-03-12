@@ -1,0 +1,7 @@
+#!/bin/bash
+PKG=$(basename "$0")
+if [[ "$OS" = "Darwin" ]]; then
+	has "$PKG"  ||  npm install -g "$PKG"
+else
+	has "$PKG"  ||  sudo npm install -g "$PKG"
+fi

@@ -1,0 +1,11 @@
+#!/bin/bash
+gimme python
+PKG=$(basename "$0")
+if ! has "$PKG"; then
+	if [[ "$OS" = "Darwin" ]]; then
+		easy_install -d "$PYTHONPATH" "$PKG"
+		ln -sv "$PYTHONPATH/$PKG" "$(brew --prefix)/bin/$PKG"
+	else
+		easy_install "$PKG"
+	fi
+fi

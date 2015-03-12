@@ -1,0 +1,2 @@
+#!/bin/bash
+has colordiff  ||  gimme colordiff

@@ -1,0 +1,9 @@
+#!/bin/bash
+#TODO: setup go vs golang dirs
+if ! has go; then
+	if [[ "$OS" = "Darwin" ]]; then
+		gimme_pkg go --cross-compile-common
+	else
+		gimme_pkg golang
+	fi
+fi

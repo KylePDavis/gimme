@@ -1,0 +1,11 @@
+#!/bin/bash
+if [[ "$OS" = "Darwin" ]]; then
+	[[ -d "$HOME/Applications/Atom.app" ]]  ||  brew cask install atom
+else
+	if ! has atom; then
+		TMP_FILE="/tmp/atom$$.deb"
+		curl -fSL https://atom.io/download/deb -o "$TMP_FILE"
+		sudo dpkg -i "$TMP_FILE"
+		rm "$TMP_FILE"
+	fi
+fi

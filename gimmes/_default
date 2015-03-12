@@ -1,0 +1,14 @@
+#!/bin/bash
+has curl  ||  gimme_pkg curl
+
+if [[ "$OS" = "Darwin" ]]; then
+	[[ -d "$HOME/homebrew" ]]  ||  (mkdir "$HOME/homebrew" 2>/dev/null  &&  curl -L "https://github.com/Homebrew/homebrew/tarball/master" | tar xz --strip 1 -C "$HOME/homebrew"  &&  brew update)
+	has brew-cask  ||  brew install caskroom/cask/brew-cask
+else
+	if ! has apt-get; then
+		echo "ERROR: Your OS does not have 'apt-get' and is not currently supported."
+		echo "For support please see the website: $GIMME_URL"
+	fi
+fi
+
+has "$GIMME"  ||  gimme_pkg "$GIMME"

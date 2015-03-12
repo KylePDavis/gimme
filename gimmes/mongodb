@@ -1,0 +1,2 @@
+#!/bin/bash
+has mongod  ||  gimme_pkg mongodb

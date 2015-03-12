@@ -1,0 +1,8 @@
+#!/bin/bash
+if ! has redis-server; then
+	if [[ "$OS" = "Darwin" ]]; then
+		gimme_pkg redis
+	else
+		gimme_pkg redis-server
+	fi
+fi

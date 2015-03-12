@@ -1,0 +1,6 @@
+#!/bin/bash
+if [[ "$OS" = "Darwin" ]]; then
+	[[ -d "$HOME/Applications/Firefox.app" ]]  ||  brew cask install firefox
+else
+	has firefox  ||  gimme_pkg firefox
+fi
