@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit -o pipefail
 if [[ "$OS" = "Darwin" ]]; then
 	[[ -d "$HOME/Applications/Atom.app" ]]  ||  brew cask install atom
 else

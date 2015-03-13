@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit -o pipefail
 if ! has redis-server; then
 	if [[ "$OS" = "Darwin" ]]; then
 		gimme_pkg redis

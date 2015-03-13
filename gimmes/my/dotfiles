@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit -o pipefail
 REPO_URL="https://github.com/KylePDavis/dotfiles"
 REPO_DIR="$HOME/.dotfiles"
 

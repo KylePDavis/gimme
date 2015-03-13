@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit -o pipefail
 #TODO: setup go vs golang dirs
 if ! has go; then
 	if [[ "$OS" = "Darwin" ]]; then

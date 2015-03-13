@@ -45,6 +45,8 @@ if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 
 	else # piped
 
+		set -o errexit -o pipefail
+
 		if ! [[ -d "$GIMME_DIR" ]]; then
 
 			echo "Installing $GIMME_DIR/gimme ..."
@@ -65,17 +67,12 @@ if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 	fi
 
 else # normal usage
-	set -e
-	set -E
-	set -o pipefail
 
-	on_err() {
-		echo "ERROR: Unable to gimme \"$GIMME\" (EXIT=$?)" 1>&2
-	}
-	trap on_err ERR
+	set -o errexit -o pipefail
 
 	for GIMME; do
 
+		echo "# WANT: gimme $GIMME"
 		! [[ "$GIMMES" == *" $GIMME "* ]]  ||  exit 0
 		export GIMMES+=" $GIMME " GIMME
 
@@ -91,15 +88,20 @@ else # normal usage
 			done
 			# no default
 			if ! [[ "$P" = "$GIMME_GIMMES_DIR"* ]]; then
-				echo "# ERROR: Unable to find $GIMME_GIMMES_DIR/_default handler" 1>&2
+				echo "# ERROR: Unable to find $GIMME_GIMMES_DIR/_default handler"
 				exit 1
 			fi
 		fi
 
 		if [[ -x "$P" ]]; then
 			[[ "$PATH" = "$LINK_DIR"* ]]  ||  export PATH="$LINK_DIR:$PATH"
-			"$P"
-			echo "# DONE: gimme $GIMME"
+			if "$P" | sed "s/^/  /"; then
+				echo "# DONE: gimme $GIMME"
+			else
+				OUCH=$?
+				echo "# FAIL: Error for gimme \"$GIMME\" (EXIT_CODE=$OUCH)"
+				exit $OUCH
+			fi
 		else
 			echo "# WARN: gimme $GIMME was SKIPPED because $P is not marked executable!"
 		fi

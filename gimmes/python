@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit -o pipefail
 if [[ "$OS" = "Darwin" ]]; then
 	mkdir -p "$PYTHONPATH"
 fi

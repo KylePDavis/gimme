@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit -o pipefail
 if [[ "$OS" = "Darwin" ]]; then
 	[[ -d "$HOME/Applications/Firefox.app" ]]  ||  brew cask install firefox
 else

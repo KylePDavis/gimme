@@ -1,4 +1,6 @@
 #!/bin/bash
+set -o errexit -o pipefail
+echo "FAILED"; exit 1
 has git  ||  gimme_pkg git
 if ! [[ -f "$HOME/.gitconfig" ]]; then
 	git config --global color.ui true
