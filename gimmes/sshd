@@ -1,0 +1,13 @@
+#!/bin/bash
+set -o errexit -o pipefail
+
+if [[ "$OS" = "Darwin" ]]; then
+	# installed by default need to enable
+	if !  launchctl | grep -q org.openbsd.ssh-agent; then
+		echo "Enabling system ssh server. You may need to authenticate as an admin to do this ..."
+		sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
+	fi
+else
+	# enabled by default but need to install
+	has sshd  ||  gimme_pkg openssh-server
+fi
