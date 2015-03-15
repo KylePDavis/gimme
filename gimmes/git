@@ -1,12 +1,14 @@
 #!/bin/bash
 set -o errexit -o pipefail
+
 has git  ||  gimme_pkg git
-if ! [[ -f "$HOME/.gitconfig" ]]; then
-	git config --global color.ui true
+
+[[ "$(git config --global --get color.ui)" ]]  ||  git config --global color.ui true
+
+if ! [[ "$(git config --global --get credential.helper)" ]]; then
 	if [[ "$OS" = "Darwin" ]]; then
 		git config --global credential.helper "osxkeychain"
 	else
 		git config --global credential.helper "cache --timeout=3600"
 	fi
 fi
-
