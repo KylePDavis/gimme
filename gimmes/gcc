@@ -1,6 +1,7 @@
 #!/bin/bash
 set -o errexit -o pipefail
 if [[ "$OS" = "Darwin" ]]; then
+	set +o pipefail
 	"xcode-select" --install 2>&1 | grep -q "already installed"
 else
 	has gcc  ||  gimme_pkg build-essential
