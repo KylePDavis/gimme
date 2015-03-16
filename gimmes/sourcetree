@@ -1,0 +1,7 @@
+#!/bin/bash
+set -o errexit -o pipefail
+if [[ "$OS" = "Darwin" ]]; then
+	[[ -d "$HOME/Applications/SourceTree.app" ]]  ||  brew cask install sourcetree
+else
+	echo "WARN: no equivalent for when OS=$OS"
+fi

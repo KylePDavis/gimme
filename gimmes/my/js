@@ -1,0 +1,9 @@
+#!/bin/bash
+set -o errexit -o pipefail
+
+gimme \
+	node \
+	jshint \
+	js-beautify \
+	json \
+	jscs

@@ -1,11 +1,14 @@
 #!/bin/bash
 set -o errexit -o pipefail
+
 gimme python
-PKG=$(basename "$0")
+
+PKG=${0%%*/}
 if ! has "$PKG"; then
 	if [[ "$OS" = "Darwin" ]]; then
+		mkdir -p "$PYTHONPATH"
 		easy_install -d "$PYTHONPATH" "$PKG"
-		ln -sv "$PYTHONPATH/$PKG" "$(brew --prefix)/bin/$PKG"
+		ln -sfv "$PYTHONPATH/$PKG" "$(brew --prefix)/bin/$PKG"
 	else
 		easy_install "$PKG"
 	fi

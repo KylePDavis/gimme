@@ -1,0 +1,7 @@
+#!/bin/bash
+set -o errexit -o pipefail
+
+gimme \
+	firefox \
+	google-chrome \
+	curl

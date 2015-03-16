@@ -1,9 +1,12 @@
 #!/bin/bash
 set -o errexit -o pipefail
+
 REPO_URL="https://github.com/KylePDavis/dotfiles"
 REPO_DIR="$HOME/.dotfiles"
 
 if ! [[ -d "$REPO_DIR" ]]; then
+
+	gimme git
 
 	git clone "$REPO_URL" "$REPO_DIR"
 

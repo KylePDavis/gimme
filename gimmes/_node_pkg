@@ -1,6 +1,7 @@
 #!/bin/bash
 set -o errexit -o pipefail
-PKG=$(basename "$0")
+
+PKG=${0%%*/}
 if [[ "$OS" = "Darwin" ]]; then
 	has "$PKG"  ||  npm install -g "$PKG"
 else

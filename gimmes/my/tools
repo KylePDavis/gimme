@@ -1,11 +1,19 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
-# tools
 gimme \
 	my/dotfiles \
+	my/difftool \
+	my/mergetool \
 	liquidprompt \
-	git \
+	git-extras \
 	tmux \
 	tree \
 	vim \
+	my/www \
+	my/js \
+	my/py \
+	my/db \
+	my/go \
+	my/sh \
+	atom
