@@ -1,10 +1,34 @@
 #!/bin/bash
 set -o errexit -o pipefail
-#TODO: setup go vs golang dirs
+
+[[ "$GOROOT" ]]  ||  export GOROOT="$HOME/golang"
+[[ "$GOPATH" ]]  ||  export GOPATH="$HOME/go"
+PKG_VER="1.4.2"
+
+gimme \
+	curl \
+	git \
+	mercurial
+
 if ! has go; then
 	if [[ "$OS" = "Darwin" ]]; then
+
+		#TODO: finish getting this working in atom w/ go-plus ... maybe just use binary from site like in Linux
 		gimme_pkg go --cross-compile-common
+
 	else
-		gimme_pkg golang
+
+		if ! [[ -d "$GOROOT" ]]; then
+			PKG_URL="https://storage.googleapis.com/golang/go${PKG_VER}.linux-amd64.tar.gz"
+			mkdir -p "$GOROOT.$PKG_VER"
+			curl -k -fsSL "$PKG_URL" | tar -xz -C "$GOROOT.$PKG_VER"
+			mv -v "$GOROOT.$PKG_VER/go" "$GOROOT"
+			rm -fr "$GOROOT.$PKG_VER"
+		else
+			echo "# FAIL: Unable to install 'go' to the GOROOT=$GOROOT directory because it already exists."
+			exit 123
+		fi
+
 	fi
+
 fi
