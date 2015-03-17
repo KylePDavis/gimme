@@ -10,11 +10,11 @@ gimme \
 	git \
 	mercurial
 
+#TODO: might eventually make these two more similar
 if ! has go; then
 	if [[ "$OS" = "Darwin" ]]; then
 
-		#TODO: finish getting this working in atom w/ go-plus ... maybe just use binary from site like in Linux
-		gimme_pkg go --cross-compile-common
+		GOROOT="" gimme_pkg go --with-cc-common
 
 	else
 
