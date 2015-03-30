@@ -3,7 +3,7 @@ set -o errexit -o pipefail
 
 gimme python
 
-PKG=${0%%*/}
+PKG=${0##*/}
 if ! has "$PKG"; then
 	if [[ "$OS" = "Darwin" ]]; then
 		mkdir -p "$PYTHONPATH"
