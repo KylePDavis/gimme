@@ -10,6 +10,7 @@ if ! has "$PKG"; then
 		easy_install -d "$PYTHONPATH" "$PKG"
 		ln -sfv "$PYTHONPATH/$PKG" "$(brew --prefix)/bin/$PKG"
 	else
-		easy_install "$PKG"
+		has pip  ||  sudo easy_install "$PKG"
+		sudo pip
 	fi
 fi
