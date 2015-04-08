@@ -5,6 +5,8 @@ has git  ||  gimme_pkg git
 
 [[ "$(git config --global --get color.ui)" ]]  ||  git config --global color.ui true
 
+[[ "$(git config --global --get push.default)" ]]  ||  git config --global push.default simple
+
 if ! [[ "$(git config --global --get credential.helper)" ]]; then
 	if [[ "$OS" = "Darwin" ]]; then
 		git config --global credential.helper "osxkeychain"
