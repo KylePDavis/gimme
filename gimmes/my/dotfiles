@@ -14,4 +14,9 @@ if ! [[ -d "$REPO_DIR" ]]; then
 		"$REPO_DIR/install.sh"
 	fi
 
+else
+
+	cd "$REPO_DIR"
+	git pull
+
 fi
