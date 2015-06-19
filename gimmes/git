@@ -3,6 +3,8 @@ set -o errexit -o pipefail
 
 has git  ||  gimme_pkg git
 
+[[ "$(git config --global --get core.pager)" ]]  ||  git config --global core.pager 'less --raw-control-chars'
+
 [[ "$(git config --global --get color.ui)" ]]  ||  git config --global color.ui true
 
 [[ "$(git config --global --get push.default)" ]]  ||  git config --global push.default simple
