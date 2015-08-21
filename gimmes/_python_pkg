@@ -10,7 +10,13 @@ if ! has "$PKG"; then
 		easy_install -d "$PYTHONPATH" "$PKG"
 		ln -sfv "$PYTHONPATH/$PKG" "$(brew --prefix)/bin/$PKG"
 	else
-		has pip  ||  sudo easy_install "$PKG"
-		sudo pip
+		if ! gimme_pkg "$PKG"; then
+			echo "# WARN: Unable to get system package \"$PKG\", trying pip/easy_install instead ..."
+			if ! has pip; then
+				sudo easy_install "$PKG"
+			else
+				sudo pip install "$PKG"
+			fi
+		fi
 	fi
 fi
