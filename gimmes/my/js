@@ -10,4 +10,5 @@ gimme \
 	babel \
 	mocha \
 	node-inspector \
+	jsonlint \
 	json
