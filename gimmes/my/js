@@ -7,7 +7,6 @@ gimme \
 	jscs \
 	eslint \
 	js-beautify \
-	babel \
 	mocha \
 	node-inspector \
 	jsonlint \
