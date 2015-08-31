@@ -1,0 +1,15 @@
+#!/bin/bash
+set -o errexit -o pipefail
+if [[ "$OS" = "Darwin" ]]; then
+	[[ -d "$HOME/Applications/Eclipse.app" ]]  ||  brew cask install eclipse-jee
+else
+	if ! has eclipse; then
+		URL='http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/mars/R/eclipse-jee-mars-R-linux-gtk-x86_64.tar.gz&r=1'
+		TMP_FILE="/tmp/eclipse$$.tar.gz"
+		curl -fSL "$URL" -o "$TMP_FILE"
+		cd "$HOME"
+		tar -xzf "$TMP_FILE"
+		rm "$TMP_FILE"
+		ln -sfv "$HOME/eclipse/eclipse" "$HOME/bin/eclipse"
+	fi
+fi
