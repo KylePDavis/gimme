@@ -10,6 +10,8 @@ gimme \
 	tmux \
 	tree \
 	vim \
+	pstree \
+	htop \
 	my/www \
 	my/js \
 	my/py \
