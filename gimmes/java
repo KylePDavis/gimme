@@ -2,7 +2,7 @@
 set -o errexit -o pipefail
 
 if [[ "$OS" = "Darwin" ]]; then
-	has java  ||  brew cask install java
+	[ -d "/Library/PreferencePanes/JavaControlPanel.prefPane" ]  ||  brew cask install java
 else
 	has java  ||  gimme_pkg openjdk-8-jdk
 fi
