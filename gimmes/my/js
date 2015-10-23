@@ -7,7 +7,9 @@ gimme \
 	jscs \
 	eslint \
 	js-beautify \
+	jsfmt \
 	mocha \
+	http-server \
 	node-inspector \
 	jsonlint \
 	json
