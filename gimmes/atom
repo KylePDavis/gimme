@@ -2,6 +2,7 @@
 set -o errexit -o pipefail
 if [[ "$OS" = "Darwin" ]]; then
 	[[ -d "$HOME/Applications/Atom.app" ]]  ||  brew cask install atom
+	defaults write com.github.atom ApplePressAndHoldEnabled -bool false
 else
 	if ! has atom; then
 		TMP_FILE="/tmp/atom$$.deb"
