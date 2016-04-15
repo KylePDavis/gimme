@@ -3,8 +3,6 @@ set -o errexit -o pipefail
 
 gimme \
 	node \
-	jshint \
-	jscs \
 	eslint \
 	js-beautify \
 	jsfmt \
