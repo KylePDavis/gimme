@@ -8,8 +8,8 @@ if [[ "$OS" = "Darwin" ]]; then
 else
 	if ! has eclipse; then
 		URL='http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/mars/R/eclipse-jee-mars-R-linux-gtk-x86_64.tar.gz&r=1'
-		TMP_FILE="/tmp/eclipse$$.tar.gz"
-		curl -fSL "$URL" -o "$TMP_FILE"
+		TMP_FILE="/tmp/eclipse.mars.tar.gz"
+		curl -fsSLC- "$URL" -o "$TMP_FILE"
 		cd "$HOME"
 		tar -xzf "$TMP_FILE"
 		rm "$TMP_FILE"
