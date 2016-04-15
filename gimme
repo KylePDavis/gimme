@@ -95,7 +95,7 @@ else # normal usage
 
 		if [[ -x "$P" ]]; then
 			[[ "$PATH" = "$LINK_DIR"* ]]  ||  export PATH="$LINK_DIR:$PATH"
-			if "$P" | sed "s/^/  /"; then
+			if script -q /dev/null "$P" / | sed "s/^/  /"; then
 				echo "# DONE: $GIMME"
 			else
 				OUCH=$?
