@@ -1,0 +1,18 @@
+#!/bin/bash
+set -o errexit -o pipefail
+
+gimme java
+
+if [[ "$OS" = "Darwin" ]]; then
+	[[ -d "$HOME/Applications/Android Studio.app/" ]]  ||  brew cask install android-studio
+else
+	if ! has android-studio; then
+		URL='https://dl.google.com/dl/android/studio/ide-zips/2.0.0.20/android-studio-ide-143.2739321-linux.zip'
+		TMP_FILE="/tmp/android-studio.2.0.0.zip"
+		curl -fsSLC- "$URL" -o "$TMP_FILE"
+		cd "$HOME"
+		unzip "$TMP_FILE"
+		rm "$TMP_FILE"
+		ln -sfv "$HOME/android-studio/bin/studio.sh" "$HOME/bin/android-studio"
+	fi
+fi
