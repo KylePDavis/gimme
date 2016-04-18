@@ -6,7 +6,7 @@ if [[ "$OS" = "Darwin" ]]; then
 else
 	if ! has atom; then
 		URL='https://atom.io/download/deb'
-		TMP_FILE="/tmp/atom.latest.deb"
+		TMP_FILE="/tmp/gimme.atom.latest.deb"
 		curl -fSLC- "$URL" -o "$TMP_FILE"
 		sudo dpkg -i "$TMP_FILE"
 		rm "$TMP_FILE"
