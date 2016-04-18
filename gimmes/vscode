@@ -6,7 +6,7 @@ if ! has code; then
 	else
 		URL="https://go.microsoft.com/fwlink/?LinkID=760868"
 		TMP_FILE="/tmp/vscode-amd64.1.0.0.deb"
-		curl -fsSLC- "$URL" -o "$TMP_FILE"
+		curl -fSLC- "$URL" -o "$TMP_FILE"
 		sudo dpkg -i "$TMP_FILE"
 		rm "$TMP_FILE"
 	fi
