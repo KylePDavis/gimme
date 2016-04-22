@@ -2,7 +2,7 @@
 set -o errexit -o pipefail
 if ! has code; then
 	if [[ "$OS" = "Darwin" ]]; then
-		gimme_pkg visual-studio-code
+		brew cask install visual-studio-code
 	else
 		URL="https://go.microsoft.com/fwlink/?LinkID=760868"
 		TMP_FILE="/tmp/gimme.vscode-amd64.1.0.0.deb"
