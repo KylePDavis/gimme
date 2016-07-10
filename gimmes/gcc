@@ -2,7 +2,14 @@
 set -o errexit -o pipefail
 if [[ "$OS" = "Darwin" ]]; then
 	set +o pipefail
-	"xcode-select" --install 2>&1 | grep -q "already installed"
+	if ! "xcode-select" --version &>/dev/null; then
+		echo "Try again after installing the Xcode command-line tools by running:  xcode-select --install"
+		exit 1
+	fi
+	if ! xcodebuild -help &>/dev/null; then
+		echo "Try again after agreeing to the Xcode license by running:  sudo xcodebuild -license"
+		exit 1
+	fi
 else
 	has gcc  ||  gimme_pkg build-essential
 fi

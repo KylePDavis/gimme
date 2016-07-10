@@ -47,6 +47,23 @@ if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 
 		set -o errexit -o pipefail
 
+		# gimmes/gcc: inlined for curl-based installs
+		if [[ "$OS" = "Darwin" ]]; then
+			if ! "xcode-select" --version &>/dev/null; then
+				echo "Try again after installing the Xcode command-line tools by running:  xcode-select --install"
+				exit 1
+			fi
+			if ! xcodebuild -help &>/dev/null; then
+				echo "Try again after agreeing to the Xcode license by running:  sudo xcodebuild -license"
+				exit 1
+			fi
+		else
+			has gcc  ||  gimme_pkg build-essential
+		fi
+
+		# gimmes/git: inlined for curl-based installs
+		has git  ||  gimme_pkg git
+
 		if ! [[ -d "$GIMME_DIR" ]]; then
 
 			echo "Installing $GIMME_DIR/gimme ..."
