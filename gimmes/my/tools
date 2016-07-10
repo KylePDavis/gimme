@@ -12,6 +12,8 @@ gimme \
 	vim \
 	pstree \
 	htop \
+	graphviz \
+	plantuml \
 	my/www \
 	my/js \
 	my/py \
