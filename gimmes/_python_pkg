@@ -4,7 +4,7 @@ set -o errexit -o pipefail
 gimme python
 
 PKG=${0##*/}
-if ! has "$PKG"; then
+if ! has "$PKG" && ! python -c "import $PKG" &>/dev/null; then
 	if [[ "$OS" = "Darwin" ]]; then
 		mkdir -p "$PYTHONPATH"
 		easy_install -d "$PYTHONPATH" "$PKG"
