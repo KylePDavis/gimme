@@ -1,0 +1,26 @@
+#!/bin/bash
+set -o errexit -o pipefail
+
+# we need R
+gimme r
+
+# for Rmarkdown and knitr
+gimme pandoc
+gimme basictex
+
+if [[ "$OS" = "Darwin" ]]; then
+	if ! [[ -d "$HOME/Applications/RStudio.app/" ]]; then
+		brew cask install rstudio
+		# Make things a bit easier for RStudio...
+		sudo ln -s "$(brew --prefix)/bin/R" "/usr/local/bin/R"
+	fi
+else
+	if ! has rstudio; then
+		VER="0.99.903-amd64"
+		URL="https://download1.rstudio.org/rstudio-$VER.deb"
+		TMP_FILE="/tmp/gimme.atom.$VER.deb"
+		curl -fSLC- "$URL" -o "$TMP_FILE"
+		sudo dpkg -i "$TMP_FILE"
+		rm "$TMP_FILE"
+	fi
+fi

@@ -1,0 +1,10 @@
+#!/bin/bash
+set -o errexit -o pipefail
+
+if ! has r; then
+	if [[ "$OS" = "Darwin" ]]; then
+		gimme_pkg r
+	else
+		sudo apt-get install r-base
+	fi
+fi

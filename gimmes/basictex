@@ -1,0 +1,12 @@
+#!/bin/bash
+set -o errexit -o pipefail
+if ! has tlmgr; then
+	if [[ "$OS" = "Darwin" ]]; then
+		brew cask install basictex
+		sudo tlmgr update --self
+		sudo tlmgr install titling
+		sudo tlmgr install framed
+	else
+		echo "TODO: add BasicTex for Linux!"
+	fi
+fi
