@@ -4,10 +4,11 @@ set -o errexit -o pipefail
 gimme \
 	node \
 	eslint \
+	flow \
 	js-beautify \
 	jsfmt \
 	mocha \
 	http-server \
-	node-inspector \
+	phantomjs \
 	jsonlint \
 	json
