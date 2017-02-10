@@ -3,9 +3,9 @@ set -o errexit -o pipefail
 if ! has tlmgr; then
 	if [[ "$OS" = "Darwin" ]]; then
 		brew cask install basictex
+		export PATH="$PATH:/Library/TeX/texbin"
 		sudo tlmgr update --self
-		sudo tlmgr install titling
-		sudo tlmgr install framed
+		sudo tlmgr install titling framed
 	else
 		echo "TODO: add BasicTex for Linux!"
 	fi
