@@ -35,8 +35,6 @@ gimme_pkg() {
 	fi
 }
 
-export -f has pkgtool gimme_pkg
-
 if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 
 	if [[ "$BASH_SOURCE" ]]; then # sourced
@@ -94,6 +92,8 @@ if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 else # normal usage
 
 	set -o errexit -o pipefail
+
+	export -f has pkgtool gimme_pkg
 
 	for GIMME; do
 
