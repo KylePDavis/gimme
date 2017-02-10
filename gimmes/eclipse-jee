@@ -4,7 +4,7 @@ set -o errexit -o pipefail
 gimme java
 
 if [[ "$OS" = "Darwin" ]]; then
-	[[ -d "$HOME/Applications/Eclipse.app/" ]]  ||  brew cask install eclipse-jee
+	brew cask install eclipse-jee
 else
 	if ! has eclipse; then
 		URL='http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/mars/R/eclipse-jee-mars-R-linux-gtk-x86_64.tar.gz&r=1'

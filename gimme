@@ -24,7 +24,15 @@ pkgtool() {
 }
 
 gimme_pkg() {
-	pkgtool install "$@"
+	if [[ "$OS" = "Darwin" ]]; then
+		if pkgtool cask info "$@"; then
+			pkgtool cask install "$@"
+		else
+			pkgtool install "$@"
+		fi
+	else
+		pkgtool install "$@"
+	fi
 }
 
 export -f has pkgtool gimme_pkg

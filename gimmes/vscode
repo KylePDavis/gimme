@@ -1,9 +1,9 @@
 #!/bin/bash
 set -o errexit -o pipefail
-if ! has code; then
-	if [[ "$OS" = "Darwin" ]]; then
-		brew cask install visual-studio-code
-	else
+if [[ "$OS" = "Darwin" ]]; then
+	brew cask install visual-studio-code
+else
+	if ! has code; then
 		URL="https://go.microsoft.com/fwlink/?LinkID=760868"
 		TMP_FILE="/tmp/gimme.vscode-amd64.1.0.0.deb"
 		curl -fSLC- "$URL" -o "$TMP_FILE"

@@ -1,9 +1,7 @@
 #!/bin/bash
 set -o errexit -o pipefail
 if [[ "$OS" = "Darwin" ]]; then
-	if ! [[ -d "$HOME/Applications/Charles.app/" ]]; then
-		brew cask install charles
-	fi
+	brew cask install charles
 else
 	echo "TODO: add Charles for Linux!"
 fi

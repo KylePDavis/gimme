@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit -o pipefail
 if [[ "$OS" = "Darwin" ]]; then
-	[[ -d "$HOME/Applications/Google Chrome.app/" ]]  ||  brew cask install google-chrome
+	brew cask install google-chrome
 else
 	if ! has google-chrome && ! has chromium-browser; then
 		gimme_pkg chromium-browser
