@@ -3,7 +3,7 @@ set -o errexit -o pipefail
 
 if ! has r; then
 	if [[ "$OS" = "Darwin" ]]; then
-		gimme_pkg r
+		gimme_pkg r-app
 	else
 		sudo apt-get install r-base
 	fi
