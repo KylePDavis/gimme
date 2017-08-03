@@ -5,9 +5,7 @@ gimme python
 
 if ! has pip; then
 	if [[ "$OS" = "Darwin" ]]; then
-		mkdir -p "$PYTHONPATH"
-		easy_install -d "$PYTHONPATH" "pip"
-		ln -sfv "$PYTHONPATH/pip" "$(brew --prefix)/bin/pip"
+		easy_install --user "pip"
 	else
 		sudo easy_install pip
 	fi
