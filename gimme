@@ -15,23 +15,17 @@
 
 has() { which "$1" >/dev/null; }
 
-pkgtool() {
-	if [[ "$OS" = "Darwin" ]]; then
-		brew "$@"
-	else
-		sudo apt-get -y "$@"
-	fi
-}
-
 gimme_pkg() {
 	if [[ "$OS" = "Darwin" ]]; then
-		if pkgtool cask info "$@"; then
-			pkgtool cask install "$@"
+		if brew cask cat "$@" &>/dev/null; then
+			brew cask install "$@"
+		elif brew cat "$@" &>/dev/null; then
+			brew install "$@"
 		else
-			pkgtool install "$@"
+			brew search "$@"
 		fi
 	else
-		pkgtool install "$@"
+		sudo apt-get -y install "$@"
 	fi
 }
 
@@ -93,7 +87,7 @@ else # normal usage
 
 	set -o errexit -o pipefail
 
-	export -f has pkgtool gimme_pkg
+	export -f has gimme_pkg
 
 	for GIMME; do
 
