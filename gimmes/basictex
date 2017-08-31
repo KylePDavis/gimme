@@ -2,7 +2,7 @@
 set -o errexit -o pipefail
 if ! has tlmgr; then
 	if [[ "$OS" = "Darwin" ]]; then
-		brew cask install basictex
+		gimme_pkg basictex
 		export PATH="$PATH:/Library/TeX/texbin"
 		sudo tlmgr update --self
 		sudo tlmgr install titling framed

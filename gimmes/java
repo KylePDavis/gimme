@@ -2,7 +2,7 @@
 set -o errexit -o pipefail
 
 if [[ "$OS" = "Darwin" ]]; then
-	brew cask install java
+	gimme_pkg java
 else
 	has java  ||  gimme_pkg openjdk-8-jdk
 fi

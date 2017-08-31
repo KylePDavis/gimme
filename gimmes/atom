@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit -o pipefail
 if [[ "$OS" = "Darwin" ]]; then
-	brew cask install atom
+	gimme_pkg atom
 	defaults write com.github.atom ApplePressAndHoldEnabled -bool false
 else
 	if ! has atom; then

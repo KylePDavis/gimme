@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit -o pipefail
 if [[ "$OS" = "Darwin" ]]; then
-	brew cask install charles
+	gimme_pkg charles
 else
 	echo "TODO: add Charles for Linux!"
 fi
