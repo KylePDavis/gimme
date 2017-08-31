@@ -1,10 +1,9 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
-gimme pip
-
 PKG=${0##*/}
 if ! has "$PKG" && ! python -c "import $PKG" &>/dev/null; then
+	gimme pip
 	if [[ "$OS" = "Darwin" ]]; then
 		pip install --user "$PKG"
 	else

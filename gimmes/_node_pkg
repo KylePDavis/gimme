@@ -2,8 +2,11 @@
 set -o errexit -o pipefail
 
 PKG=${0##*/}
-if [[ "$OS" = "Darwin" ]]; then
-	has "$PKG"  ||  npm install -g "$PKG"
-else
-	has "$PKG"  ||  sudo npm install -g "$PKG"
+if ! has "$PKG"; then
+	gimme node
+	if [[ "$OS" = "Darwin" ]]; then
+		npm install -g "$PKG"
+	else
+		sudo npm install -g "$PKG"
+	fi
 fi
