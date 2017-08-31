@@ -1,7 +1,10 @@
 #!/bin/bash
 # A meta micro manager for the masses.
 # USAGE:
-#     gimme [stuff]
+#     gimme [-f|--force] stuff
+#     gimme [-l|--list|--installed]
+#     gimme [--old|--outdated]
+#     gimme [-h|--help|help]
 ###############################################################################
 
 [ "$GIMME_URL" ]         ||  export GIMME_URL="https://github.com/KylePDavis/gimme"
@@ -10,17 +13,43 @@
 [ "$GIMME_LINK" ]        ||  export GIMME_LINK="$HOME/bin/gimme"
 [ "$GIMME_LINK_DIR" ]    ||  export GIMME_LINK_DIR=$(dirname "$GIMME_LINK")
 [ "$GIMMES" ]            ||  export GIMMES=""
+[ "$INIT_GIMMES" ]       ||  export INIT_GIMMES=""
 [ "$OS" ]                ||  export OS=$(uname -s)
 [ "$DEBUG" ]             ||  export DEBUG=
+[ "$FORCE" ]             ||  export FORCE=
 
-has() { which "$1" >/dev/null; }
+###############################################################################
+
+has() {
+	if [[ "$FORCE" ]] && echo " $INIT_GIMMES " | grep -q " $1 "; then
+		false
+	else
+		which "$1" >/dev/null
+	fi
+}
 
 gimme_pkg() {
 	if [[ "$OS" = "Darwin" ]]; then
 		if brew cask cat "$@" &>/dev/null; then
-			brew cask install "$@"
+			if brew cask list "$@" &>/dev/null; then
+				if [[ "$FORCE" ]]; then
+					brew cask reinstall "$@"
+				else
+					echo "# SKIPPED: $GIMME  (force reinstall/upgrade via:  gimme -f $GIMME)"
+				fi
+			else
+				brew cask install "$@"
+			fi
 		elif brew cat "$@" &>/dev/null; then
-			brew install "$@"
+			if brew list "$@" &>/dev/null; then
+				if [[ "$FORCE" ]]; then
+					brew upgrade "$@"
+				else
+					echo "# SKIPPED: $GIMME  (force upgrade via:  gimme -f $GIMME)"
+				fi
+			else
+				brew install "$@"
+			fi
 		else
 			brew search "$@"
 		fi
@@ -31,11 +60,11 @@ gimme_pkg() {
 
 if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 
-	if [[ "$BASH_SOURCE" ]]; then # sourced
+	if [[ "${BASH_SOURCE[@]}" ]]; then # sourced
 
 		_gimme_completely() {
 			if [[ "$2" = -* ]]; then
-				COMPREPLY=( $(compgen -W "--help --version" -- "$2") )
+				COMPREPLY=( $(compgen -W "-v --verbose --debug --force --version --help -l --list --installed --old --outdated" -- "$2") )
 			else
 				COMPREPLY=( $(find "$GIMME_GIMMES_DIR" -type f -path "$GIMME_GIMMES_DIR/$2*" \! -name '.*' | cut -c$(( ${#GIMME_GIMMES_DIR} + 2))- ) )
 			fi
@@ -89,7 +118,59 @@ else # normal usage
 
 	export -f has gimme_pkg
 
+	[[ "$INIT_GIMMES" ]] || export INIT_GIMMES="$@"
+
 	for GIMME; do
+
+		case "$GIMME" in
+			-v|--verbose|--debug)
+				DEBUG=1
+				continue
+				;;
+			-f|--force)
+				FORCE=1
+				continue
+				;;
+			--version)
+				echo "Version:"
+				git log -1
+				exit 0
+				;;
+			-h|--help)
+				sed -n -e'/^#[[:space:]]/p' -e'/^###/q' "$0"
+				echo "# GIMMES:"
+				echo $(cd "$GIMME_GIMMES_DIR"; find . -type f -perm +1 | sed 's/^..//')
+				exit 0
+				;;
+			-l|--list|--installed)
+				echo "# BREW (cask):"
+				brew cask list
+				echo
+				echo "# BREW:"
+				brew list
+				echo
+				echo "# NPM:"
+				npm -g ls --depth 0 --parseable | sed -e'1d' -e's:^.*node_modules/::'
+				echo
+				echo "# PIP:"
+				pip list
+				exit 0
+				;;
+			--old|--outdated)
+				echo "# BREW (cask):"
+				brew cask outdated
+				echo
+				echo "# BREW:"
+				brew outdated
+				echo
+				echo "# NPM:"
+				npm outdated $(npm -g ls --depth 0 --parseable | sed -e'1d' -e's:^.*node_modules/::')
+				echo
+				echo "# PIP:"
+				pip list --outdated
+				exit 0
+				;;
+		esac
 
 		echo "# WANT: $GIMME"
 		! [[ "$GIMMES" == *" $GIMME "* ]]  ||  exit 0
