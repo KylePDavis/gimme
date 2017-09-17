@@ -10,7 +10,7 @@ gimme basictex
 
 if [[ "$OS" = "Darwin" ]]; then
 	if ! [[ -d "$HOME/Applications/RStudio.app/" ]]; then
-		brew cask install rstudio
+		gimme_pkg rstudio
 		# Make things a bit easier for RStudio...
 		sudo ln -s "$(brew --prefix)/bin/R" "/usr/local/bin/R"
 	fi
