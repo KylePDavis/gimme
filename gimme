@@ -108,7 +108,9 @@ if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 
 			echo "Updating gimme (in $GIMME_DIR) ..."
 			cd "$GIMME_DIR"
+			OLD_REV=$(git rev-parse HEAD)
 			git pull
+			git log --oneline "$OLD_REV.."
 
 		fi
 
