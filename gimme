@@ -152,7 +152,7 @@ else # normal usage
 				brew list
 				echo
 				echo "# NPM:"
-				npm -g ls --depth 0 --parseable | sed -e'1d' -e's:^.*node_modules/::'
+				npm -g ls --depth 0
 				echo
 				echo "# PIP:"
 				pip list --format=columns
@@ -166,7 +166,7 @@ else # normal usage
 				brew outdated
 				echo
 				echo "# NPM:"
-				npm outdated $(npm -g ls --depth 0 --parseable | sed -e'1d' -e's:^.*node_modules/::')
+				npm outdated -g --depth 0
 				echo
 				echo "# PIP:"
 				pip list --format=columns --outdated
