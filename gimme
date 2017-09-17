@@ -32,8 +32,8 @@ has() {
 
 gimme_pkg() {
 	if [[ "$OS" = "Darwin" ]]; then
-		if brew cask cat "$@" &>/dev/null; then
-			if brew cask list "$@" &>/dev/null; then
+		if brew cask cat "$1" &>/dev/null; then
+			if brew cask list "$1" &>/dev/null; then
 				if [[ "$FORCE" ]]; then
 					brew cask reinstall "$@"
 				else
@@ -42,10 +42,10 @@ gimme_pkg() {
 			else
 				brew cask install "$@"
 			fi
-		elif brew cat "$@" &>/dev/null; then
-			if brew list "$@" &>/dev/null; then
+		elif brew cat "$1" &>/dev/null; then
+			if brew list "$1" &>/dev/null; then
 				if [[ "$FORCE" ]]; then
-					brew upgrade "$@"
+					brew upgrade "$@"  ||  echo "# WARN: forced upgrade failed (it may already be up to date)"
 				else
 					echo "# SKIPPED: $GIMME  (force upgrade via:  gimme -f $GIMME)"
 				fi
@@ -53,7 +53,7 @@ gimme_pkg() {
 				brew install "$@"
 			fi
 		else
-			brew search "$@"
+			brew search "$1"
 		fi
 	else
 		sudo apt-get -y install "$@"
