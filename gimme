@@ -4,6 +4,7 @@
 #     gimme [-f|--force] stuff
 #     gimme [-l|--list|--installed]
 #     gimme [--old|--outdated]
+#     gimme [-v|--verbose|--debug]
 #     gimme [-h|--help|help]
 ###############################################################################
 
@@ -19,6 +20,7 @@
 [ "$FORCE" ]             ||  export FORCE=
 
 ###############################################################################
+! [[ "$DEBUG" ]] || set -x
 
 has() {
 	if [[ "$FORCE" ]] && echo " $INIT_GIMMES " | grep -q " $1 "; then
@@ -172,6 +174,8 @@ else # normal usage
 				;;
 		esac
 
+		! [[ "$DEBUG" ]] || set -x
+
 		echo "# WANT: $GIMME"
 		! [[ "$GIMMES" == *" $GIMME "* ]]  ||  exit 0
 		export GIMMES+=" $GIMME " GIMME
@@ -195,7 +199,7 @@ else # normal usage
 
 		if [[ -x "$P" ]]; then
 			[[ "$PATH" = "$LINK_DIR"* ]]  ||  export PATH="$LINK_DIR:$PATH"
-			if "$P" | sed "s/^/  /"; then
+			if (if [[ "$DEBUG" ]]; then bash -x "$P"; else bash "$P"; fi); then
 				echo "# DONE: $GIMME"
 			else
 				OUCH=$?
