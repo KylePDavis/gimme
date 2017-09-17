@@ -5,7 +5,7 @@ gimme python
 
 if ! has pip; then
 	if [[ "$OS" = "Darwin" ]]; then
-		easy_install --user "pip"
+		curl -fsSL "https://bootstrap.pypa.io/get-pip.py" | python - --user
 	else
 		sudo easy_install pip
 	fi

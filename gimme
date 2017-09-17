@@ -155,7 +155,7 @@ else # normal usage
 				npm -g ls --depth 0 --parseable | sed -e'1d' -e's:^.*node_modules/::'
 				echo
 				echo "# PIP:"
-				pip list
+				pip list --format=columns
 				exit 0
 				;;
 			--old|--outdated)
@@ -169,7 +169,7 @@ else # normal usage
 				npm outdated $(npm -g ls --depth 0 --parseable | sed -e'1d' -e's:^.*node_modules/::')
 				echo
 				echo "# PIP:"
-				pip list --outdated
+				pip list --format=columns --outdated
 				exit 0
 				;;
 		esac
