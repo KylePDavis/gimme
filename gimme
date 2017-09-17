@@ -139,7 +139,7 @@ else # normal usage
 			-h|--help)
 				sed -n -e'/^#[[:space:]]/p' -e'/^###/q' "$0"
 				echo "# GIMMES:"
-				echo $(cd "$GIMME_GIMMES_DIR"; find . -type f -perm +1 | sed 's/^..//')
+				echo $(cd "$GIMME_GIMMES_DIR"; find . -type f -perm +1 | sed -e's/^..//' -e'/^_/d' | sort)
 				exit 0
 				;;
 			-l|--list|--installed)
