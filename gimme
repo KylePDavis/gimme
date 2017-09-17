@@ -122,6 +122,7 @@ else # normal usage
 
 	[[ "$INIT_GIMMES" ]] || export INIT_GIMMES="$@"
 
+	DID_GIMME=
 	for GIMME; do
 
 		case "$GIMME" in
@@ -138,7 +139,7 @@ else # normal usage
 				git log -1
 				exit 0
 				;;
-			-h|--help)
+			-h|--help|"")
 				sed -n -e'/^#[[:space:]]/p' -e'/^###/q' "$0"
 				echo "# GIMMES:"
 				echo $(cd "$GIMME_GIMMES_DIR"; find . -type f -perm +1 | sed -e's/^..//' -e'/^_/d' | sort)
@@ -198,6 +199,7 @@ else # normal usage
 		fi
 
 		if [[ -x "$P" ]]; then
+			DID_GIMME=1
 			[[ "$PATH" = "$LINK_DIR"* ]]  ||  export PATH="$LINK_DIR:$PATH"
 			if (if [[ "$DEBUG" ]]; then bash -x "$P"; else bash "$P"; fi); then
 				echo "# DONE: $GIMME"
@@ -211,4 +213,6 @@ else # normal usage
 		fi
 
 	done
+
+	[[ "$DID_GIMME" ]]  ||  echo "# WARN: nothing to do... try:  gimme --help"
 fi
