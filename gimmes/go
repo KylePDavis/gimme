@@ -3,7 +3,7 @@ set -o errexit -o pipefail
 
 [[ "$GOROOT" ]]  ||  export GOROOT="$HOME/golang"
 [[ "$GOPATH" ]]  ||  export GOPATH="$HOME/go"
-PKG_VER="1.4.2"
+PKG_VER="1.9"
 
 gimme \
 	curl \
