@@ -7,7 +7,7 @@ if ! has "$GIMME"; then
 
 	if [[ "$OS" = "Darwin" ]]; then
 		if ! has brew; then
-			[[ -d "$HOME/homebrew" ]]  ||  (mkdir "$HOME/homebrew" 2>/dev/null  &&  curl -L "https://github.com/Homebrew/homebrew/tarball/master" | tar xz --strip 1 -C "$HOME/homebrew"  &&  brew update)
+			[[ -d "$HOME/homebrew" ]]  ||  (mkdir "$HOME/homebrew" 2>/dev/null  &&  curl -L "https://github.com/Homebrew/homebrew/tarball/master" | tar xz --strip 1 -C "$HOME/homebrew"  &&  $HOME/homebrew/bin/brew update)
 		fi
 	else
 		if ! has apt-get; then
