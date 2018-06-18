@@ -3,19 +3,6 @@ set -o errexit -o pipefail
 
 if ! has "$GIMME"; then
 
-	has curl  ||  gimme_pkg curl
-
-	if [[ "$OS" = "Darwin" ]]; then
-		if ! has brew; then
-			[[ -d "$HOME/homebrew" ]]  ||  (mkdir "$HOME/homebrew" 2>/dev/null  &&  curl -L "https://github.com/Homebrew/homebrew/tarball/master" | tar xz --strip 1 -C "$HOME/homebrew"  &&  "$HOME/homebrew/bin/brew" update)
-		fi
-	else
-		if ! has apt-get; then
-			echo "ERROR: Your OS does not have 'apt-get' and is not currently supported."
-			echo "For support please see the website: $GIMME_URL"
-		fi
-	fi
-
 	gimme_pkg "$GIMME"
 
 fi

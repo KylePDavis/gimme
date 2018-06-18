@@ -1,0 +1,5 @@
+#!/bin/bash
+set -o errexit -o pipefail
+
+# call gimme_pkg handler with no package to just do general prep for packages
+gimme_pkg ""

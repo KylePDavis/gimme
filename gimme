@@ -32,31 +32,43 @@ has() {
 
 gimme_pkg() {
 	if [[ "$OS" = "Darwin" ]]; then
-		if brew cask cat "$1" &>/dev/null; then
-			if brew cask list "$1" &>/dev/null; then
-				if [[ "$FORCE" ]]; then
-					brew cask reinstall "$@"
+		if ! has brew; then
+			has curl  ||  gimme_pkg curl
+			[[ -d "$HOME/homebrew" ]]  ||  (mkdir "$HOME/homebrew" 2>/dev/null  &&  curl -L "https://github.com/Homebrew/homebrew/tarball/master" | tar xz --strip 1 -C "$HOME/homebrew"  &&  "$HOME/homebrew/bin/brew" update)
+		fi
+		if [[ "$1" ]]; then
+			if brew cask cat "$1" &>/dev/null; then
+				if brew cask list "$1" &>/dev/null; then
+					if [[ "$FORCE" ]]; then
+						brew cask reinstall "$@"
+					else
+						echo "# SKIPPED: $GIMME  (force reinstall/upgrade via:  gimme -f $GIMME)"
+					fi
 				else
-					echo "# SKIPPED: $GIMME  (force reinstall/upgrade via:  gimme -f $GIMME)"
+					brew cask install "$@"
+				fi
+			elif brew cat "$1" &>/dev/null; then
+				if brew list "$1" &>/dev/null; then
+					if [[ "$FORCE" ]]; then
+						brew upgrade "$@"  ||  echo "# WARN: forced upgrade failed (it may already be up to date)"
+					else
+						echo "# SKIPPED: $GIMME  (force upgrade via:  gimme -f $GIMME)"
+					fi
+				else
+					brew install "$@"
 				fi
 			else
-				brew cask install "$@"
+				brew search "$1"
 			fi
-		elif brew cat "$1" &>/dev/null; then
-			if brew list "$1" &>/dev/null; then
-				if [[ "$FORCE" ]]; then
-					brew upgrade "$@"  ||  echo "# WARN: forced upgrade failed (it may already be up to date)"
-				else
-					echo "# SKIPPED: $GIMME  (force upgrade via:  gimme -f $GIMME)"
-				fi
-			else
-				brew install "$@"
-			fi
-		else
-			brew search "$1"
 		fi
 	else
-		sudo apt-get -y install "$@"
+		if ! has apt-get; then
+			echo "ERROR: Your OS does not have 'apt-get' and is not currently supported."
+			echo "For support please see the website: $GIMME_URL"
+		fi
+		if [[ "$1" ]]; then
+			sudo apt-get -y install "$@"
+		fi
 	fi
 }
 
@@ -174,6 +186,10 @@ else # normal usage
 				echo "# PIP:"
 				pip list --format=columns --outdated
 				exit 0
+				;;
+			-*)
+				echo "# ERROR: Unknown option: $GIMME"
+				continue
 				;;
 		esac
 
