@@ -114,20 +114,27 @@ if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 
 		if ! [[ -d "$GIMME_DIR" ]]; then
 
-			echo "Installing $GIMME_DIR/gimme ..."
+			echo "Installing '$GIMME_DIR/gimme' ..."
 			mkdir -p "$GIMME_DIR"
 			git clone "$GIMME_URL" "$GIMME_DIR"
 			mkdir -p "$(dirname "$GIMME_LINK")"
 			ln -sf "$GIMME_DIR/gimme" "$GIMME_LINK"
-			echo "Done! Now you can 'gimme stuff' or 'gimme dev/stuff' or even 'gimme gimme'!"
+			echo "Installed '$GIMME_DIR/gimme'"
+			echo "You can use this script directly or include in your shell's startup profile script to enable tab completion."
+			echo "Example usage 'gimme stuff' or 'gimme dev/stuff' or even 'gimme gimme'!"
 
 		else
 
-			echo "Updating gimme (in $GIMME_DIR) ..."
+			echo "Updating '$GIMME_DIR/gimme' ..."
 			cd "$GIMME_DIR"
-			OLD_REV=$(git rev-parse HEAD)
+			OLD_REV="$(git rev-parse HEAD)"
 			git pull
-			git log --oneline "$OLD_REV.."
+			NEW_REV="$(git rev-parse HEAD)"
+			if [[ "$NEW_REV" != "$OLD_REV" ]]; then
+				echo "Updates to '$GIMME_DIR/gimme' ..."
+				git log --oneline "$OLD_REV.."
+			fi
+			echo "Updated '$GIMME_DIR/gimme'"
 
 		fi
 
