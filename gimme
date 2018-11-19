@@ -76,6 +76,11 @@ if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 
 	if [[ "${BASH_SOURCE[@]}" ]]; then # sourced
 
+		# if 'gimme' is not Add gimme to the PATH if not already found
+		if ! [[ "$PATH" == *"$GIMME_DIR"* ]]; then
+			export PATH="$PATH:$GIMME_DIR"
+		fi
+
 		# setup autocompletion for gimmes
 		_gimme_completely() {
 			if [[ "$2" = -* ]]; then
