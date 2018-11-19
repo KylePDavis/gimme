@@ -76,14 +76,14 @@ if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
 
 	if [[ "${BASH_SOURCE[@]}" ]]; then # sourced
 
+		# setup autocompletion for gimmes
 		_gimme_completely() {
 			if [[ "$2" = -* ]]; then
 				COMPREPLY=( $(compgen -W "-v --verbose --debug --force --version --help -l --list --installed --old --outdated" -- "$2") )
 			else
-				COMPREPLY=( $(find "$GIMME_GIMMES_DIR" -type f -path "$GIMME_GIMMES_DIR/$2*" \! -name '.*' | cut -c$(( ${#GIMME_GIMMES_DIR} + 2))- ) )
+				COMPREPLY=( $(cd "$GIMME_GIMMES_DIR"; find . -path "./$2*" \! -type d \! -name '.*' \! -name '_*' | cut -c3- ) )
 			fi
 		}
-
 		complete -F _gimme_completely gimme
 
 	else # piped
