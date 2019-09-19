@@ -3,7 +3,7 @@ set -o errexit -o pipefail
 
 [[ "$GOROOT" ]]  ||  export GOROOT="$HOME/golang"
 [[ "$GOPATH" ]]  ||  export GOPATH="$HOME/go"
-PKG_VER="1.9"
+PKG_VER="1.13"
 
 gimme \
 	curl \
@@ -14,7 +14,7 @@ gimme \
 if ! has go; then
 	if [[ "$OS" = "Darwin" ]]; then
 
-		GOROOT="" gimme_pkg go --with-cc-common
+		GOROOT="" gimme_pkg go
 
 	else
 
