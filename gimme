@@ -26,7 +26,7 @@ has() {
 	if [[ "$FORCE" ]] && echo " $INIT_GIMMES " | grep -q " $1 "; then
 		false
 	else
-		which "$1" >/dev/null
+		command -v "$1" >/dev/null
 	fi
 }
 
@@ -72,9 +72,13 @@ gimme_pkg() {
 	fi
 }
 
-if [[ "$0" =~ [-]?bash ]]; then # sourced or piped
+if [[ "$ZSH_VERSION" ]]; then
+	setopt posixargzero
+fi
 
-	if [[ "${BASH_SOURCE[@]}" ]]; then # sourced
+if [[ "$0" =~ -?(z|ba)sh ]]; then # sourced or piped
+
+	if [[ "$ZSH_EVAL_CONTEXT" =~ :file$ || "${BASH_SOURCE[*]}" ]]; then # sourced
 
 		# if 'gimme' is not Add gimme to the PATH if not already found
 		if ! [[ "$PATH" == *"$GIMME_DIR"* ]]; then
