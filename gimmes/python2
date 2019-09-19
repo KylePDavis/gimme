@@ -1,3 +1,3 @@
 #!/bin/bash
 set -o errexit -o pipefail
-has python  ||  gimme_pkg python
+has python2  ||  gimme_pkg python2
