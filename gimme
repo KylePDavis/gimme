@@ -34,7 +34,7 @@ gimme_pkg() {
 	if [[ "$OS" = "Darwin" ]]; then
 		if ! has brew; then
 			has curl  ||  gimme_pkg curl
-			[[ -d "$HOME/homebrew" ]]  ||  (mkdir "$HOME/homebrew" 2>/dev/null  &&  curl -L "https://github.com/Homebrew/homebrew/tarball/master" | tar xz --strip 1 -C "$HOME/homebrew"  &&  "$HOME/homebrew/bin/brew" update)
+			[[ -d "$HOME/homebrew" ]]  ||  (mkdir "$HOME/homebrew" 2>/dev/null  &&  curl -L "https://github.com/Homebrew/brew/tarball/master" | tar xz --strip 1 -C "$HOME/homebrew"  &&  "$HOME/homebrew/bin/brew" update)
 		fi
 		if [[ "$1" ]]; then
 			if brew cask cat "$1" &>/dev/null; then
