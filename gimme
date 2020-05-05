@@ -61,13 +61,15 @@ gimme_pkg() {
 				brew search "$1"
 			fi
 		fi
-	else
-		if ! has apt-get; then
-			echo "ERROR: Your OS does not have 'apt-get' and is not currently supported."
-			echo "For support please see the website: $GIMME_URL"
-		fi
-		if [[ "$1" ]]; then
+	elif [[ "$1" ]]; then
+		if has apt-get; then
 			sudo apt-get -y install "$@"
+		elif has yum; then
+			sudo yum -y install "$@"
+		elif has apk; then
+			sudo apk add "$@"
+		else
+			echo "ERROR: This OS is not currently supported. See the website for details: $GIMME_URL"
 		fi
 	fi
 }
@@ -110,7 +112,7 @@ if [[ "$0" =~ -?(z|ba)sh ]]; then # sourced or piped
 				exit 1
 			fi
 		else
-			has gcc  ||  gimme_pkg build-essential
+			has gcc  ||  gimme_pkg build-essential  ||  gimme_pkg gcc
 		fi
 
 		# gimmes/git: inlined for curl-based installs
