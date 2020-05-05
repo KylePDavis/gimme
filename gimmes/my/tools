@@ -2,7 +2,7 @@
 set -o errexit -o pipefail
 
 gimme \
-	my/dotfiles \
+	kylepdavis/dotfiles \
 	my/difftool \
 	my/mergetool \
 	liquidprompt \
