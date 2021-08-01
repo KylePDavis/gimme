@@ -37,15 +37,15 @@ gimme_pkg() {
 			[[ -d "$HOME/homebrew" ]]  ||  (mkdir "$HOME/homebrew" 2>/dev/null  &&  curl -L "https://github.com/Homebrew/brew/tarball/master" | tar xz --strip 1 -C "$HOME/homebrew"  &&  "$HOME/homebrew/bin/brew" update)
 		fi
 		if [[ "$1" ]]; then
-			if brew cask cat "$1" &>/dev/null; then
-				if brew cask list "$1" &>/dev/null; then
+			if brew cat --cask "$1" &>/dev/null; then
+				if brew list --cask "$1" &>/dev/null; then
 					if [[ "$FORCE" ]]; then
-						brew cask reinstall "$@"
+						brew reinstall --cask "$@"
 					else
 						echo "# SKIPPED: $GIMME  (force reinstall/upgrade via:  gimme -f $GIMME)"
 					fi
 				else
-					brew cask install "$@"
+					brew install --cask "$@"
 				fi
 			elif brew cat "$1" &>/dev/null; then
 				if brew list "$1" &>/dev/null; then
