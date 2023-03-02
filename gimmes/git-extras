@@ -11,4 +11,5 @@ if ! [[ "$(git alias)" ]]; then
 	git alias co checkout
 	git alias di diff
 	git alias st status
+	git alias sw switch
 fi
