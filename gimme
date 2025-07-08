@@ -178,9 +178,6 @@ else # normal usage
 				exit 0
 				;;
 			-l|--list|--installed)
-				echo "# BREW (cask):"
-				brew cask list
-				echo
 				echo "# BREW:"
 				brew list
 				echo
@@ -192,9 +189,6 @@ else # normal usage
 				exit 0
 				;;
 			--old|--outdated)
-				echo "# BREW (cask):"
-				brew cask outdated
-				echo
 				echo "# BREW:"
 				brew outdated
 				echo
