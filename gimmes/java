@@ -1,8 +1,10 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
-if [[ "$OS" = "Darwin" ]]; then
-	gimme_pkg java
-else
-	has java  ||  gimme_pkg openjdk-8-jdk
+if ! has java; then
+    if [[ "$OS" = "Darwin" ]]; then
+        gimme_pkg java
+    else
+        gimme_pkg openjdk-8-jdk
+    fi
 fi

@@ -1,0 +1,9 @@
+#!/bin/bash
+set -o errexit -o pipefail
+
+gimme gcc
+
+if ! has rustup; then
+    gimme rustup
+    rustup-init -y
+fi

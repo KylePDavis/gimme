@@ -1,7 +1,8 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
-gimme \
-	virtualenv \
-	pylint \
-	pep8
+if ! has python; then
+    gimme mise
+    mise install python
+    mise use -g python@latest
+fi

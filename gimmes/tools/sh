@@ -2,4 +2,5 @@
 set -o errexit -o pipefail
 
 gimme \
-	shellcheck
+	shellcheck \
+    --

@@ -4,4 +4,5 @@ set -o errexit -o pipefail
 gimme \
 	mongodb \
 	redis \
-	sqlite3
+	sqlite3 \
+    --

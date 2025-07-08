@@ -3,21 +3,18 @@ set -o errexit -o pipefail
 
 gimme \
 	kylepdavis/dotfiles \
-	my/difftool \
-	my/mergetool \
-	liquidprompt \
-	git-extras \
+    tools/db \
+    tools/difftool \
+    tools/git \
+    tools/go \
+    tools/js \
+    tools/mergetool \
+    tools/py \
+    tools/rust \
+    tools/sh \
+    tools/text \
+    tools/www \
 	tmux \
 	tree \
-	vim \
 	pstree \
-	htop \
-	graphviz \
-	plantuml \
-	my/www \
-	my/js \
-	my/py \
-	my/db \
-	my/go \
-	my/sh \
-	vscode
+    --

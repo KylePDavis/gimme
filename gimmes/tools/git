@@ -2,5 +2,7 @@
 set -o errexit -o pipefail
 
 gimme \
-	go \
+    git \
+    git-extras \
+    gh \
     --

@@ -1,12 +1,12 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
-if ! has node; then
+if ! has bun; then
 	gimme \
         gcc \
         git \
         mise \
         --
-    mise install node
-    mise use -g node@latest
+    mise install bun
+    mise use -g bun@latest
 fi

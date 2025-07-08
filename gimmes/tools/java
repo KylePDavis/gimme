@@ -3,9 +3,5 @@ set -o errexit -o pipefail
 
 gimme \
 	java \
-	ant \
-	maven \
-	ivy \
-	eclipse-jee \
-	netbeans \
-	android-studio
+	gradle \
+    --
