@@ -168,7 +168,7 @@ else # normal usage
 
 	export -f has gimme_pkg
 
-	[[ "$INIT_GIMMES" ]] || export INIT_GIMMES="$@"
+	export INIT_GIMMES=${INIT_GIMMES:="$@"}
 
 	DID_GIMME=
 	for GIMME; do
