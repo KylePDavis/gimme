@@ -88,14 +88,30 @@ if [[ "$0" =~ -?(z|ba)sh ]]; then # sourced or piped
 		fi
 
 		# setup autocompletion for gimmes
-		_gimme_completely() {
-			if [[ "$2" = -* ]]; then
-				COMPREPLY=( $(compgen -W "-v --verbose --debug --force --version --help -l --list --installed --old --outdated" -- "$2") )
-			else
-				COMPREPLY=( $(cd "$GIMME_GIMMES_DIR"; find . -path "./$2*" \! -type d \! -name '.*' \! -name '_*' | cut -c3- ) )
-			fi
-		}
-		complete -F _gimme_completely gimme
+        if [[ "$ZSH_EVAL_CONTEXT" =~ :file$ ]]; then
+            _gimme() {
+                _arguments \
+                    '1:recipe:_files -W "$GIMME_GIMMES_DIR"' \
+                    '(-v --verbose)'{-v,--verbose}'[enable verbose output]' \
+                    '(--debug)--debug[enable debug messages]' \
+                    '(--force)--force[force install recipes]' \
+                    '(--version)--version[show version]' \
+                    '(-h --help)'{-h,--help}'[show help message]' \
+                    '(-l --list)'{-l,--list}'[list gimme recipes]' \
+                    '(--installed)--installed[show installed]' \
+                    '(--old --outdated)'{--old,--outdated}'[show old/outdated]'
+            }
+            compdef _gimme gimme
+        else
+            _gimme() {
+                if [[ "$2" = -* ]]; then
+                    COMPREPLY=( $(compgen -W "-v --verbose --debug --force --version -h --help -l --list --installed --old --outdated" -- "$2") )
+                else
+                    COMPREPLY=( $(cd "$GIMME_GIMMES_DIR"; find . -path "./$2*" \! -type d \! -name '.*' \! -name '_*' | cut -c3- ) )
+                fi
+            }
+            complete -F _gimme gimme
+        fi
 
 	else # piped
 
