@@ -8,16 +8,16 @@
 #     gimme [-h|--help|help]
 ###############################################################################
 
-[ "$GIMME_URL" ]         ||  export GIMME_URL="https://github.com/KylePDavis/gimme"
-[ "$GIMME_DIR" ]         ||  export GIMME_DIR="$HOME/.gimme"
-[ "$GIMME_GIMMES_DIR" ]  ||  export GIMME_GIMMES_DIR="$GIMME_DIR/gimmes"
-[ "$GIMME_LINK" ]        ||  export GIMME_LINK="$HOME/bin/gimme"
-[ "$GIMME_LINK_DIR" ]    ||  export GIMME_LINK_DIR=$(dirname "$GIMME_LINK")
-[ "$GIMMES" ]            ||  export GIMMES=""
-[ "$INIT_GIMMES" ]       ||  export INIT_GIMMES=""
-[ "$OS" ]                ||  export OS=$(uname -s)
-[ "$DEBUG" ]             ||  export DEBUG=
-[ "$FORCE" ]             ||  export FORCE=
+export GIMME_URL=${GIMME_URL:="https://github.com/KylePDavis/gimme"}
+export GIMME_DIR=${GIMME_DIR:="$HOME/.gimme"}
+export GIMME_GIMMES_DIR=${GIMME_GIMMES_DIR:="$GIMME_DIR/gimmes"}
+export GIMME_LINK=${GIMME_LINK:="$HOME/bin/gimme"}
+export GIMME_LINK_DIR=${GIMME_LINK_DIR:=$(dirname "$GIMME_LINK")}
+export GIMMES=${GIMMES:=""}
+export INIT_GIMMES=${INIT_GIMMES:=""}
+export OS=${OS:=$(uname -s)}
+export DEBUG=${DEBUG:=""}
+export FORCE=${FORCE:=""}
 
 ###############################################################################
 ! [[ "$DEBUG" ]] || set -x
