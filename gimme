@@ -23,7 +23,7 @@ export FORCE=${FORCE:=""}
 ! [[ "$DEBUG" ]] || set -x
 
 has() {
-	if [[ "$FORCE" ]] && echo " $INIT_GIMMES " | grep -q " $1 "; then
+	if [[ "$FORCE" ]] && [[ " $INIT_GIMMES " == *" $1 "* ]]; then
 		false
 	else
 		command -v "$1" >/dev/null
