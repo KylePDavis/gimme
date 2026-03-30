@@ -1,0 +1,16 @@
+#!/bin/bash
+set -o errexit -o pipefail
+
+has nvim  ||  gimme_pkg nvim
+
+NVIM_DIR="$HOME/.config/nvim"
+NVIM_INIT="$NVIM_DIR/init.vim"
+if [ -f "$HOME/.vimrc" ] && ! [ -f "" ]; then
+    echo "# INFO: Configuring nvim to use vimrc in: $NVIM_INIT"
+    mkdir -p "$NVIM_DIR"
+    cat >"$NVIM_INIT" <<EOF
+set runtimepath^=~/.vim runtimepath+=~/.vim/after
+let &packpath=&runtimepath
+source ~/.vimrc
+EOF
+fi
